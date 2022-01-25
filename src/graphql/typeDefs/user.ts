@@ -11,6 +11,7 @@ export default gql`
     }
 
     type confirmationMessage {
+        user: user
         message: String!
     }
 

@@ -8,23 +8,29 @@ export default {
     Mutation: {
         saveUser: async(_: any, { first_name, last_name, email, password }:any, {req, res}:any) => {
             try{
-                await pool.query(`
+                const result = await pool.query(`
                 
-                INSERT INTO member (
-                    f_name,
-                    l_name,
-                    email,
-                    password
-                ) VALUES (
-                    '${first_name}',
-                    '${last_name}',
-                    '${email}',
-                    '${password}'
-                );
-                
-                `);
-
+                                INSERT INTO member (
+                                    f_name,
+                                    l_name,
+                                    email,
+                                    password
+                                ) VALUES (
+                                    '${first_name}',
+                                    '${last_name}',
+                                    '${email}',
+                                    '${password}'
+                                ) RETURNING *;
+                                
+                                `);
                 return {
+                    user: {
+                        id: result.rows[0].id,
+                        first_name: result.rows[0].f_name,
+                        last_name: result.rows[0].l_name,
+                        email: result.rows[0].email,
+                        password: result.rows[0].password
+                    },
                     message: "User added successfully"
                 }
 
