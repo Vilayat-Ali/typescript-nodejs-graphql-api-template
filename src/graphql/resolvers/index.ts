@@ -1,4 +1,4 @@
-import base from './base';
+import base from './user';
 
 export default [
     base

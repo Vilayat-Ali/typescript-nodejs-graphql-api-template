@@ -12,7 +12,7 @@ import {typeDefs, resolvers} from "./graphql";
 const apolloServer = new ApolloServer({
     typeDefs: typeDefs,
     resolvers: resolvers,
-    context: {}
+    context: ({ req, res}):any => ({ req, res})
 });
 
 apolloServer.start()
