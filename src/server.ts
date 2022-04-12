@@ -2,9 +2,28 @@ import express from 'express';
 import cors from 'cors';
 import consola from 'consola';
 import dotenv from 'dotenv';
+import mongoose from "mongoose";
 import { ApolloServer } from 'apollo-server-express';
 
 dotenv.config(); // environment variables
+
+// Connecting to mongodb
+mongoose.connect(process.env.DB_URL!);
+
+const db = mongoose.connection
+db.once('open', _ => {
+  consola.info({
+      message: "Connected to MongoDB database 🚀",
+      badge: true,
+  });
+});
+
+db.on('error', err => {
+    consola.fatal({
+        message: `Error: ${err.message}`,
+        badge: true,
+    });
+})
 
 // importing graphql components 
 import {typeDefs, resolvers} from "./graphql";
