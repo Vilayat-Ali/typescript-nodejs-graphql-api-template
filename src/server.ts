@@ -1,5 +1,7 @@
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
+import morgan from 'morgan';
 import consola from 'consola';
 import dotenv from 'dotenv';
 import mongoose from "mongoose";
@@ -31,7 +33,7 @@ import {typeDefs, resolvers} from "./graphql";
 const apolloServer = new ApolloServer({
     typeDefs: typeDefs,
     resolvers: resolvers,
-    context: ({ req, res}):any => ({ req, res})
+    introspection: true,
 });
 
 apolloServer.start()
@@ -43,6 +45,8 @@ apolloServer.start()
         // instantiating the express app
         const app = express();
         app.use(cors());
+        app.use(helmet());
+        app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
         app.use(express.json());
 
         // passing middleware as middleware to the apolloServer 

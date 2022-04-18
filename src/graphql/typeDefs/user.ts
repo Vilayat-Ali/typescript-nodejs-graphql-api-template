@@ -2,25 +2,23 @@ import { gql } from 'apollo-server-express';
 
 export default gql`
 
-    type user {
-        id: String,
-        first_name: String,
-        last_name: String,
-        email: String,
-        password: String
+    type memberType{
+        name: String!,
+        email: String!
     }
 
-    type confirmationMessage {
-        user: user
-        message: String!
+    type savedMemberType{
+        id: String!,
+        name: String!,
+        email: String!,
     }
 
-    extend type Query {
-        findUser(id: String!): user
+    type Query{
+        getAllMembers: [memberType!]!
     }
 
-    extend type Mutation {
-        saveUser(first_name: String!, last_name: String!, email: String!, password: String!):confirmationMessage!
+    type Mutation {
+        registerMember(name: String, email: String, password: String): savedMemberType!
     }
 
 `;
