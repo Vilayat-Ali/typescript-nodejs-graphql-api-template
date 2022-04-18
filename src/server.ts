@@ -5,7 +5,8 @@ import morgan from 'morgan';
 import consola from 'consola';
 import dotenv from 'dotenv';
 import mongoose from "mongoose";
-import { ApolloServer } from 'apollo-server-express';
+import {verify} from "jsonwebtoken";
+import { ApolloServer, AuthenticationError } from 'apollo-server-express';
 
 dotenv.config(); // environment variables
 
@@ -33,6 +34,15 @@ import {typeDefs, resolvers} from "./graphql";
 const apolloServer = new ApolloServer({
     typeDefs: typeDefs,
     resolvers: resolvers,
+    context: ({req}) => {
+        const headers = req.headers['authorization'];
+        const token = headers && headers.split(" ")[1];
+        if(token){
+            const user = verify(token, process.env.ACCESS_TOKEN_SECRET!);
+            if (!user) throw new AuthenticationError('Login Required');
+            return {user}
+        }
+    },
     introspection: true,
 });
 

@@ -1,4 +1,5 @@
-import base from "./user";
+import user from "./user";
+import account from "./account";
 import { gql } from "apollo-server-express";
 
 const baseSchema = gql`
@@ -14,6 +15,7 @@ const baseSchema = gql`
 `;
 
 export default [
-    base,
+    user,
+    account,
     baseSchema
 ]

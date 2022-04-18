@@ -1,5 +1,7 @@
-import base from './user';
+import user from './user';
+import account from './account';
 
 export default [
-    base
+    user,
+    account
 ]
