@@ -1,8 +1,5 @@
-// For postgreSQL support
-import pool from "./../../database/connection";
-
 // importing db models
-import memberModel from "../../models/member.model";
+import userModel from "../../models/user.model";
 
 // importing utility functions 
 import {generateAccessToken} from "../../auth/auth";
@@ -14,7 +11,7 @@ export default {
         getAllMembers: async(parent: any, args: any, context: any, info: any) => {
             if(!context.user) return null;
             if(context.user){
-                const members = await memberModel.find({});
+                const members = await userModel.find({});
                 return members;
             }
         },
@@ -22,15 +19,15 @@ export default {
             if(!context.user) return null; 
             if(context.user){
                 if(args.id && !args.name && !args.email){
-                    const member = await memberModel.findOne({_id: args.id});  
+                    const member = await userModel.findOne({_id: args.id});  
                     return member;
                 }
                 else if(!args.id && args.name && !args.email){
-                    const member = await memberModel.findOne({name: args.name});  
+                    const member = await userModel.findOne({name: args.name});  
                     return member;
                 }
                 else if(!args.id && !args.name && args.email){
-                    const member = await memberModel.findOne({email: args.email});  
+                    const member = await userModel.findOne({email: args.email});  
                     return member;
                 }
             }
@@ -41,7 +38,7 @@ export default {
             const {name, email, password} = args;
             const encryptedPassword = encrypt(password);
             const accessToken:string = generateAccessToken(name, email);
-            const newMember = new memberModel({name, email, password: encryptedPassword});
+            const newMember = new userModel({name, email, password: encryptedPassword});
             newMember.save();
             const createdUser = {id: newMember._id, name, email, access_token: accessToken};
             return createdUser;

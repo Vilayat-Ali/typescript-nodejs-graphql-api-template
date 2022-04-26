@@ -1,8 +1,5 @@
-// For postgreSQL support
-import pool from "./../../database/connection";
-
 // importing db models
-import memberModel from "../../models/member.model";
+import userModel from "../../models/user.model";
 import { ApolloError } from "apollo-server-express";
 
 // importing utilities
@@ -12,7 +9,7 @@ import {generateRefreshToken} from "../../auth/auth";
 export default {
     Query: {
         login: async(parent: any, args: any, context: any, info: any) => {
-            const searchMember = await memberModel.findOne({email: args.email}, {_id: 0});
+            const searchMember = await userModel.findOne({email: args.email}, {_id: 0});
             if(searchMember && verifyHash(args.password, searchMember.password)){
                 const refresh_token = generateRefreshToken(searchMember.name, searchMember.email);
                 return {refresh_token};
